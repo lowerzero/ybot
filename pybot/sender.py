@@ -46,13 +46,13 @@ class Sender(threading.Thread):
 
             self.set_status('sending media')
 
-            if len(self.media) > 1:
-                for n, m in enumerate(self.media):
-                    with open(m, 'rb') as fh:
-                        print(f'sending {m}')
+            for n, m in enumerate(self.media):
+                with open(m, 'rb') as fh:
+                    print(f'sending {m}')
+                    if len(self.media) > 1:
                         send_audio(PUBLIC_CHANNEL, fh, f'[{n + 1}/{len(self.media)}] {self.title}')
-            else:
-                send_audio(PUBLIC_CHANNEL, fh, self.title)
+                    else:
+                        send_audio(PUBLIC_CHANNEL, fh, self.title)
 
             if os.path.exists(self.base_path):
                 shutil.rmtree(self.base_path)
