@@ -25,9 +25,13 @@ class Downloader(threading.Thread):
                    status)
 
     def hook(self, update):
-        downloaded = (update['downloaded_bytes'] / (update['total_bytes'] / 100) / 10)
-        if int(downloaded) > self.download_progress:
-            self.download_progress = int(downloaded)
+        if '_percent_str' not in update:
+            return
+
+        percent_main = int(int(update['_percent_str'].split('.')[0].strip()) / 10)
+
+        if int(percent_main) > self.download_progress:
+            self.download_progress = int(percent_main)
             self.set_status(f'{update["status"]} ⏳ {self.download_progress * 10} %')
 
     def run(self):
@@ -47,16 +51,23 @@ class Downloader(threading.Thread):
             return False
 
         no_video_formats = [x for x in video_info['formats'] if x['vcodec'] == 'none']
-        less_size_format = no_video_formats[0]
-        for nvf in no_video_formats:
-            if nvf['filesize'] < less_size_format['filesize']:
-                less_size_format = nvf
+
+        selected_format = None
+
+        # format id 140
+        for x in no_video_formats:
+            if x['format_id'] == '140':
+                selected_format = x
+
+        if selected_format is None:
+            self.set_status('error: no format found')
+            return
 
         file_basepath = f'{WORKDIR}/media/{video_info["id"]}'
 
         ydl_opts = {
-            'format': less_size_format['format_id'],
-            'outtmpl': f'{file_basepath}/src.{less_size_format["ext"]}',
+            'format': selected_format['format_id'],
+            'outtmpl': f'{file_basepath}/src.{selected_format["ext"]}',
             'forceid': True,
             'restrictfilenames': True
         }
@@ -80,7 +91,7 @@ class Downloader(threading.Thread):
         self.set_status('await transcoding')
 
         TCD_QUEUE.put({
-            'src': f'{file_basepath}/src.{less_size_format["ext"]}',
+            'src': f'{file_basepath}/src.{selected_format["ext"]}',
             'dest': f'{file_basepath}/dest.mp3',
             'thumb': f'{file_basepath}/thumbnail.jpg',
             'chat_id': self.chat_id,

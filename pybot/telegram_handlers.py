@@ -5,7 +5,8 @@ from pybot.downloader import Downloader
 
 
 def echo(update, context):
-    if update.message.from_user.id != OWNER_ID:
+    if int(update.message.from_user.id) != int(OWNER_ID):
+        print(f'{update.message.from_user.id} != {OWNER_ID}')
         update.message.reply_text('💩')
         return
 
