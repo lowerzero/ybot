@@ -70,6 +70,8 @@ class Transcoder(threading.Thread):
         for line in tcd_process.stdout:
             clean_line = line.strip()
 
+            print(f'[debug] {line}')
+
             if clean_line.startswith('Duration'):
                 self.duration_str = clean_line.split(',')[0].split(' ')[-1].split('.')[0]
                 dp_hour, dp_min, dp_sec = self.duration_str.split(':')
