@@ -6,14 +6,14 @@ from telegram import Bot, InlineKeyboardButton, InlineKeyboardMarkup
 TOKEN = os.getenv('TOKEN')
 TCD_QUEUE = Queue()
 SEND_QUEUE = Queue()
-WORKDIR = os.getenv('WORKDIR')
+WORKDIR = os.getenv('WORKDIR', '/tmp')
 
 OWNER_ID = os.getenv('OWNER_ID')
 PUBLIC_CHANNEL = os.getenv('PUBLIC_CHANNEL')
 
 FILESIZE_LIMIT = 51380224
 
-FFMPEG_THREADS = os.getenv('FFMPEG_THREADS')
+FFMPEG_THREADS = os.getenv('FFMPEG_THREADS', '1')
 
 
 def bot_instance():
