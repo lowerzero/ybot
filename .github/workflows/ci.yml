@@ -32,5 +32,7 @@ jobs:
           platforms: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64,linux/ppc64le,linux/s390x
           push: true
           tags: |
-            lowerzero/pybot:${{ GITHUB_RUN_NUMBER }}
+            lowerzero/pybot:${{ env.docker_tag }}
             lowerzero/pybot:latest
+        env:
+          docker_tag: ${GITHUB_RUN_NUMBER}
