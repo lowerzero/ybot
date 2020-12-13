@@ -5,7 +5,7 @@ on:
     branches: main
 
 env:
-  run_number: ${GITHUB_RUN_NUMBER}
+  run_number: ${env.GITHUB_RUN_NUMBER}
 
 jobs:
   multi:
@@ -36,4 +36,4 @@ jobs:
           push: true
           tags: |
             lowerzero/pybot:latest
-            lowerzero/pybot:${{ env.GITHUB_RUN_NUMBER }}
+            lowerzero/pybot:${{ env.run_number }}
