@@ -36,4 +36,4 @@ jobs:
           push: true
           tags: |
             lowerzero/pybot:latest
-            lowerzero/pybot:${{ env.run_number }}
+            lowerzero/pybot:${env.GITHUB_RUN_NUMBER}
